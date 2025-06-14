@@ -154,10 +154,10 @@ pod 'VoiceActivityDetector'
 
 ## Swift Package Manager
 
-VoiceActivityDetector supports Swift Package Manager. To integrate, add the package in your `Package.swift` dependencies:
+VoiceActivityDetector supports Swift Package Manager. To integrate, use the `spm-support` branch (which embeds libfvad) by adding the package in your `Package.swift` dependencies:
 
 ```swift
-    .package(url: "https://github.com/reedom/VoiceActivityDetector.git", from: "0.2.0"),
+    .package(url: "https://github.com/stormychel/VoiceActivityDetector.git", .branch("spm-support")),
 ```
 
 Then add `VoiceActivityDetector` as a dependency of your target:

@@ -14,7 +14,7 @@ let package = Package(
         ),
     ],
     dependencies: [],
-)    targets: [
+    targets: [
         // Embedded libfvad C library
         .target(
             name: "libfvad",
