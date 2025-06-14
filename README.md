@@ -11,18 +11,24 @@ A VAD classifies a piece of audio data as being voiced or unvoiced. It can be us
 
 The VAD that Google developed for the WebRTC project is reportedly one of the best available, being fast, modern and free.
 
+## Fork Information
+
+This is a fork of the original project by [reedom](https://github.com/reedom/VoiceActivityDetector), with added support for Swift Package Manager and ongoing maintenance.
+
+The fork is available at: [https://github.com/stormychel/VoiceActivityDetector](https://github.com/stormychel/VoiceActivityDetector)
+
 ## Sample data format
 
-The VAD engine simply work only with singed 16 bit, single channel PCM.
+The VAD engine works only with signed 16-bit, single channel PCM.
 
-Supported bitrates are:
-- 8000Hz
-- 16000Hz
-- 32000Hz
-- 48000Hz
+Supported sample rates are:
 
-Note that internally all processing will be done 8000Hz.
-input data in higher sample rates will just be downsampled first.
+* 8000Hz
+* 16000Hz
+* 32000Hz
+* 48000Hz
+
+Note that internally all processing is done at 8000Hz; input data at higher sample rates will be downsampled first.
 
 ## Usage
 
@@ -33,9 +39,7 @@ let voiceActivityDetector = VoiceActivityDetector(sampleRate: 8000,
                                                   agressiveness: .veryAggressive)
 
 func didReceiveSampleBuffer(_ sampleBuffer: CMSampleBuffer) {
-  // activities: [VoiceActivityDetector.VoiceActivityInfo]?
   let activities = voiceActivityDetector(sampleBuffer: sampleBuffer, byEachMilliSec: 10)!
-
   // ...
 }
 ```
@@ -50,125 +54,59 @@ And against an audio file, see [Test code](Example/Tests/Tests.swift).
 ```swift
 init?()
 convenience init?(sampleRate: Int = 8000, agressiveness: DetectionAgressiveness = .quality)
-convenience init?(agressiveness: DetectionAgressiveness = .quality) {
+convenience init?(agressiveness: DetectionAgressiveness = .quality)
 ```
-
-Instanciate VoiceActivityDetector.
 
 ### Properties
 
 ```swift
 var agressiveness: DetectionAgressiveness
-```
-
-VAD operating "aggressiveness" mode.
-
-- `.quality`
-  The default value; normal voice detection mode. Suitable for high bitrate, low-noise data.
-  May classify noise as voice, too.
-- `.lowBitRate`
-  Detection mode optimised for low-bitrate audio.
-- `.aggressive`
-  Detection mode best suited for somewhat noisy, lower quality audio.
-- `.veryAggressive`
-  Detection mode with lowest miss-rate. Works well for most inputs.
-
-```swift
 var sampleRate: Int
 ```
-
-Sample rate in Hz for VAD operations.  
-Valid values are 8000, 16000, 32000 and 48000. The default is 8000.
-
-Note that internally all processing will be done 8000Hz.
-input data in higher sample rates will just be downsampled first.
 
 ### Functions
 
 ```swift
 func reset()
-```
-
-Reinitializes a VAD instance, clearing all state and resetting mode and
-sample rate to defaults.
-
-```swift
 func detect(frames: UnsafePointer<Int16>, count: Int) -> VoiceActivity
-```
-
-Calculates a VAD decision for an audio duration.
-
-`frames` is an array of signed 16-bit samples.  
-`count` specifies count of frames.
-Since internal processor supports only counts of 10, 20 or 30 ms,
-so for example at 8 kHz, `count` must be either 80, 160 or 240.
-
-Returns a VAD decision.
-
-Under the hood, the VAD engine calculates energy powers in six frequency bands between 80-4KHz from signal data flow and guesses chance of voice activity state in a input duration. So, its decision should be more accurate by sequencial detection than one-shot or periodic ones.
-
-```swift
 func detect(frames: UnsafePointer<Int16>, lengthInMilliSec ms: Int) -> VoiceActivity
+func detect(sampleBuffer: CMSampleBuffer, byEachMilliSec ms: Int, offset: Int = 0, duration: Int? = nil) -> [VoiceActivityInfo]?
 ```
 
-`ms` specifies processing duration in milliseconds.  
-The should be either 10, 20 or 30 (ms).
+## Swift Package Manager
+
+VoiceActivityDetector now also supports Swift Package Manager. (added by [stormychel](https://github.com/stormychel))
+
+You can add it to your project by specifying:
 
 ```swift
-  public func detect(sampleBuffer: CMSampleBuffer,
-                     byEachMilliSec ms: Int,
-                     offset: Int = 0,
-                     duration: Int? = nil) -> [VoiceActivityInfo]? {
+.package(url: "https://github.com/stormychel/VoiceActivityDetector.git", from: "1.0.0")
 ```
-Calculates VAD decisions among a sample buffer.
 
-`sampleBuffer` is an audio buffer to be inspected.  
-`ms` specifies processing duration in milliseconds.  
-`offset` controlls offset time in milliseconds from where to start VAD.  
-`duration` controlls total VAD duration in milliseconds.  
+And include it in your target dependencies:
 
-Returns an array of VAD decision information.
+```swift
+.target(
+    name: "YourTarget",
+    dependencies: ["VoiceActivityDetector"]
+),
+```
 
-- `timestamp: Int`
-  Elapse time from the beginning of the sample buffer, in milliseconds.
-- `presentationTimestamp: CMTime`
-  This is `CMSampleBuffer.presentationTime` + `timestamp`, which may represent
-  a timestamp in entire of a recording session.
-- `voiceActivity: VoiceActivity`
-  a VAD decision.
+## CocoaPods
 
-
-
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Installation
-
-VoiceActivityDetector is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+VoiceActivityDetector is also available via [CocoaPods](https://cocoapods.org).
+Add the following line to your Podfile:
 
 ```ruby
 pod 'VoiceActivityDetector'
 ```
 
-## Swift Package Manager
-
-VoiceActivityDetector supports Swift Package Manager.
-
-Add `VoiceActivityDetector` as a dependency of your target:
-
-```swift
-    .target(
-        name: "YourTarget",
-        dependencies: ["VoiceActivityDetector"]
-    ),
-```
-
 ## Author
 
-reedom, tohru@reedom.com
+Originally developed by reedom ([tohru@reedom.com](mailto:tohru@reedom.com)).
+
+Fork maintained by [stormychel](https://github.com/stormychel).
 
 ## License
 
-VoiceActivityDetector is available under the MIT license. See the LICENSE file for more info.
+VoiceActivityDetector is available under the MIT license. See the LICENSE file for more information.
