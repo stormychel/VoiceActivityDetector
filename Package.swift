@@ -14,15 +14,14 @@ let package = Package(
         ),
     ],
     dependencies: [],
-    targets: [
-        .systemLibrary(
+)    targets: [
+        // Embedded libfvad C library
+        .target(
             name: "libfvad",
-            pkgConfig: "libfvad",
-            providers: [
-                .brew(["libfvad"]),
-                .apt(["libfvad-dev"]),
-            ]
+            path: "Sources/libfvad",
+            publicHeadersPath: "include"
         ),
+        // Swift interface
         .target(
             name: "VoiceActivityDetector",
             dependencies: ["libfvad"],
