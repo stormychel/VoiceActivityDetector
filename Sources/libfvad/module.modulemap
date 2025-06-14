@@ -1,0 +1,5 @@
+module libfvad {
+    umbrella header "fvad.h"
+    link "fvad"
+    export *
+}
