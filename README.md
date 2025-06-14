@@ -152,6 +152,23 @@ it, simply add the following line to your Podfile:
 pod 'VoiceActivityDetector'
 ```
 
+## Swift Package Manager
+
+VoiceActivityDetector supports Swift Package Manager. Add it to your project by including it in your `Package.swift` dependencies:
+
+```swift
+.package(url: "https://github.com/reedom/VoiceActivityDetector.git", from: "0.2.0"),
+```
+
+Then add `VoiceActivityDetector` as a dependency of your target:
+
+```swift
+.target(
+    name: "YourTarget",
+    dependencies: ["VoiceActivityDetector"]
+),
+```
+
 ## Author
 
 reedom, tohru@reedom.com
