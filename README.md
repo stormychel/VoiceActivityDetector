@@ -154,30 +154,19 @@ pod 'VoiceActivityDetector'
 
 ## Swift Package Manager
 
-VoiceActivityDetector supports Swift Package Manager. Before building, make sure you have the underlying C library installed:
-
-- macOS (Homebrew):
-  ```bash
-  brew install libfvad
-  ```
-- Debian/Ubuntu (apt):
-  ```bash
-  sudo apt-get install libfvad-dev
-  ```
-
-Add it to your project by including it in your `Package.swift` dependencies:
+VoiceActivityDetector supports Swift Package Manager. To integrate, add the package in your `Package.swift` dependencies:
 
 ```swift
-.package(url: "https://github.com/reedom/VoiceActivityDetector.git", from: "0.2.0"),
+    .package(url: "https://github.com/reedom/VoiceActivityDetector.git", from: "0.2.0"),
 ```
 
 Then add `VoiceActivityDetector` as a dependency of your target:
 
 ```swift
-.target(
-    name: "YourTarget",
-    dependencies: ["VoiceActivityDetector"]
-),
+    .target(
+        name: "YourTarget",
+        dependencies: ["VoiceActivityDetector"]
+    ),
 ```
 
 ## Author
