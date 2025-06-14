@@ -154,13 +154,9 @@ pod 'VoiceActivityDetector'
 
 ## Swift Package Manager
 
-VoiceActivityDetector supports Swift Package Manager. To integrate, add the package in your `Package.swift` dependencies:
+VoiceActivityDetector supports Swift Package Manager.
 
-```swift
-.package(url: "https://github.com/stormychel/VoiceActivityDetector.git", from: "0.3.0"),
-```
-
-Then add `VoiceActivityDetector` as a dependency of your target:
+Add `VoiceActivityDetector` as a dependency of your target:
 
 ```swift
     .target(
